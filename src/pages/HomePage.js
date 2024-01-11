@@ -14,8 +14,7 @@ export default function HomePage() {
                 <HomeSectionCarousel sectionName={"Men's Shirt"} />
                 <HomeSectionCarousel sectionName={"Women's Saree"}/>
             </div>
-            {/* <Product /> */}
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }

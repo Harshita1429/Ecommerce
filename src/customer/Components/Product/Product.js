@@ -24,7 +24,7 @@ export default function Product() {
         const searchParams = new URLSearchParams(location.search);
         let filterValue = searchParams.getAll(sectionId);
         if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
-            filterValue=filterValue[0].split(",").filter((item) => item !== value);
+            filterValue = filterValue[0].split(",").filter((item) => item !== value);
             if (filterValue.length === 0) {
                 searchParams.delete(sectionId);
             }
@@ -38,9 +38,9 @@ export default function Product() {
         navigate({ search: `?${query}` });
 
     }
-    const handleRadioFilterChange=(e,sectionId)=>{
+    const handleRadioFilterChange = (e, sectionId) => {
         const searchParams = new URLSearchParams(location.search);
-        searchParams.set(sectionId,e.target.value);
+        searchParams.set(sectionId, e.target.value);
         const query = searchParams.toString();
         navigate({ search: `?${query}` });
     }
@@ -276,7 +276,7 @@ export default function Product() {
                                                             {section.options.map((option, optionIdx) => (
                                                                 <div key={option.value} className="flex items-center">
                                                                     <input
-                                                                     onChange={(e) => handleRadioFilterChange(e, section.id)}
+                                                                        onChange={(e) => handleRadioFilterChange(e, section.id)}
                                                                         id={`filter-${section.id}-${optionIdx}`}
                                                                         name={`${section.id}[]`}
                                                                         defaultValue={option.value}

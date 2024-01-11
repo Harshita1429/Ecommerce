@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router';
-import HomePage from './pages/HomePage';
 import { CustomerRouters } from './Routers/CustomerRouters';
+import Footer from './customer/Components/Footer/Footer';
 
 function App() {
   return (
@@ -8,7 +8,7 @@ function App() {
       <Routes>
         <Route path='/*' element={<CustomerRouters />}></Route>
       </Routes>
-      
+      <Footer/>
     </div>
   );
 }
