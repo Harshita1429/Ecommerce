@@ -1,18 +1,27 @@
 import { Grid } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import OrderCard from './OrderCard'
+import { useDispatch, useSelector } from 'react-redux'
+import { getOrderHistory } from '../../../redux/feature/orderslice'
 
-const orderStatus=[
-    {label:'On The Way', value:'on_the_way'},
-    {label:'Delivered', value:'delivered'},
-    {label:'Cancelled', value:'cancelled'},
-    {label:'Returned', value:'returned'},
-]
+// const orderStatus=[
+//     {label:'On The Way', value:'on_the_way'},
+//     {label:'Delivered', value:'delivered'},
+//     {label:'Cancelled', value:'cancelled'},
+//     {label:'Returned', value:'returned'},
+// ]
 const Order = () => {
+    const dispatch=useDispatch();
+    const orderHistoryData=useSelector((state)=>state.order.getOrderHistory?.[0]);
+    console.log("orderHistoryData",orderHistoryData?.[0]);
+    const jwt=localStorage.getItem("jwt");
+    useEffect(()=>{
+        dispatch(getOrderHistory({jwt}));
+    },[jwt]);
   return (
     <div className='px:5 lg:px-20'>
         <Grid container sx={{justifyContent:'space-between'}}>
-            <Grid item xs={2.3}>
+            {/* <Grid item xs={2.3}>
                 <div className='h-auto shadow-lg bg-white p-5 sticky top-5'>
                     <h1 className='font-bold text-lg'>Filter</h1>
                     <div className='space-y-4 mt-10'>
@@ -23,9 +32,9 @@ const Order = () => {
                         </div>)}
                     </div>
                 </div>
-            </Grid>
+            </Grid> */}
             <Grid item xs={9}>
-                <div className='space-y-5'>{[1,1,1,1,1,1].map((item) =><OrderCard/> )}</div>
+                <div className='space-y-5'>{orderHistoryData?.map((item) =><OrderCard item={item}/>  )}</div>
                 
                 
             </Grid>

@@ -1,12 +1,14 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { mens_shirt } from '../../../Data/mens_shirt'
 import { ProductCard } from './ProductCard'
 import { filters, singleFilter } from './FilterData'
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { productGetById } from '../../../redux/feature/productslice'
+import { Card, Pagination } from '@mui/material'
 
 const sortOptions = [
     { name: 'Price: Low to High', href: '#', current: false },
@@ -20,17 +22,34 @@ export default function Product() {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+    const params=useParams();
+    const dispatch=useDispatch();
+    // const jwt = useSelector((state) => state.auth.signInResponse?.[0]?.jwt);
+    const jwt=localStorage.getItem("jwt");
+    const decodedQueryString=decodeURIComponent(location.search);
+    const SearchParams=new URLSearchParams(decodedQueryString);
+    const colorValue=SearchParams.get("color");
+    const sizeValue=SearchParams.get("size");
+    const priceValue=SearchParams.get("price");
+    const discount=SearchParams.get("discount");
+    const sortValue=SearchParams.get("sort");
+    const pageNumber=SearchParams.get("page") || 1;
+    const stock=SearchParams.get("stock");
+    const products=useSelector((state)=>state.product.productData?.[0]);
     const handleFilter = (value, sectionId) => {
         const searchParams = new URLSearchParams(location.search);
         let filterValue = searchParams.getAll(sectionId);
         if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
             filterValue = filterValue[0].split(",").filter((item) => item !== value);
+            console.log("filterValue",filterValue);
             if (filterValue.length === 0) {
                 searchParams.delete(sectionId);
             }
         }
         else {
+            console.log("filterValue after",filterValue)
             filterValue.push(value);
+            console.log("filterValue after else",filterValue)
         } if (filterValue.length > 0) {
             searchParams.set(sectionId, filterValue.join(","));
         }
@@ -44,6 +63,31 @@ export default function Product() {
         const query = searchParams.toString();
         navigate({ search: `?${query}` });
     }
+    const handlePaginationChange=(event,value)=>{
+        const searchParams= new URLSearchParams(location.search);
+        searchParams.set("page",value);
+        const query=searchParams.toString();
+        navigate({search:`?${query}`});
+    }
+    useEffect(()=>{
+        if(jwt)
+        {
+        const [minPrice,maxPrice]=priceValue===null?[0,10000]:priceValue.split("-").map(Number);
+        const data={
+            category:params.levelThree,
+            colors:colorValue || [],
+            sized:sizeValue || [],
+            minPrice,
+            maxPrice,
+            minDiscount:discount || 0,
+            sort :sortValue || "price_low",
+            pageNumber:pageNumber-1,
+            pageSize:2,
+            stock:stock
+        }
+        dispatch(productGetById({data,jwt}));
+    }
+    },[params.levelThree,colorValue,sizeValue,priceValue,discount,sortValue,pageNumber,stock,jwt])
     return (
         <div className="bg-white">
             <div>
@@ -303,9 +347,15 @@ export default function Product() {
                             {/* Product grid */}
                             <div className="lg:col-span-4 w-full">
                                 <div className='flex flex-wrap  bg-white'>
-                                    {mens_shirt.map((item) => <ProductCard product={item} />)}
+                                    {products?.content.map((item) => <ProductCard product={item} />)}
+                                    {products?.content.length==0 && <Card className=' w-full  m-10 p-10 flex justify-center'>No data available with selected criteria</Card>}
                                 </div>
                             </div>
+                        </div>
+                    </section>
+                    <section className='w-full'>
+                        <div className='px-4 py-5 flex justify-center'>
+                        <Pagination count={products?.totalPages} color="secondary" onChange={handlePaginationChange}/>
                         </div>
                     </section>
                 </main>

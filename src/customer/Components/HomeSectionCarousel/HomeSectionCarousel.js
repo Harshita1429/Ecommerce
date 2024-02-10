@@ -20,10 +20,10 @@ export default function HomeSectionCarousel({ sectionName }) {
     }
     const items = mens_shirt.map((item) => <HomeSectionCard product={item} />);
     return (
-        <div className=" border ">
+        <div className=" border">
             <h2 className="text-2xl font-extrabold py-2">{sectionName}</h2>
             <div className="relative p-5">
-                <AliceCarousel
+                <AliceCarousel 
                     items={items}
                     keyboardNavigation={true}
                     responsive={responsive}

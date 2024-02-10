@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
-import { useNavigate } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
+import { useDispatch, useSelector } from 'react-redux'
+import { findProductById } from '../../../redux/feature/productslice'
+import { addItemToCart } from '../../../redux/feature/cartslice'
 
 const product = {
     name: 'Basic Tee 6-Pack',
@@ -60,13 +63,23 @@ function classNames(...classes) {
 }
 
 export default function ProductDetails() {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+    const [selectedSize, setSelectedSize] = useState("")
     const navigate = useNavigate();
+    const params=useParams();
+    const products=useSelector((state)=>state.product.getProductData?.[0]);
+    console.log("product",products);
+    const dispatch=useDispatch();
+    const jwt=localStorage.getItem("jwt");
+    // const jwt = useSelector((state) => state.auth.signInResponse?.[0]?.jwt);
     const handleAddToCart =()=>{
+        const data={productId:params.productId,size:selectedSize.name};
+        dispatch(addItemToCart({jwt,data}));
         navigate('/cart');
     }
-
+    useEffect(()=>{
+        const productId=params.productId;
+        dispatch(findProductById({jwt,productId}));
+    },[params.productId])
     return (
         <div className="bg-white">
             <div className="pt-6">
@@ -103,7 +116,7 @@ export default function ProductDetails() {
                     <div className="flex flex-col items-center">
                         <div className="overflow-hidden rounded-lg max-w-[30rem] max-h-[35rem]">
                             <img
-                                src={product.images[0].src}
+                                src={products?.imageUrl}
                                 alt={product.images[0].alt}
                                 className="h-full w-full object-cover object-center"
                             />
@@ -121,9 +134,9 @@ export default function ProductDetails() {
                     {/* Product info */}
                     <div className="lg:col-span-1 max-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
                         <div className="lg:col-span-2 ">
-                            <h1 className="text-lg lg:text-x1 font-semibold text-gray-900">Brand name</h1>
+                            <h1 className="text-lg lg:text-x1 font-semibold text-gray-900">{products?.brand}</h1>
                             <h1 className='text-lg lg:text-x1 text-gray-900 opacity-60 pt-1'>
-                                Casual sleeves solid men t-shirt.
+                                {products?.title}
                             </h1>
                         </div>
 
@@ -132,10 +145,10 @@ export default function ProductDetails() {
                             <h2 className="sr-only">Product information</h2>
                             <div className='flex space-x-5 items-center text-lg lg:text-x1 text-gray-900 mt-6'>
                                 <p className='font-semibold'>
-                                    Rs 1199
+                                   {products?.discountPrice}
                                 </p>
-                                <p className='opacity-50 line-through'>Rs 2499</p>
-                                <p className='text-green-600 font-semibold'>47% off</p>
+                                <p className='opacity-50 line-through'>{products?.price}</p>
+                                <p className='text-green-600 font-semibold'>{products?.discountPercent}% off</p>
 
                             </div>
 
@@ -159,7 +172,7 @@ export default function ProductDetails() {
 
                                     </div>
 
-                                    <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
+                                    <RadioGroup aria-checked={true} value={selectedSize} onChange={setSelectedSize} className="mt-4">
                                         <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                                             {product.sizes.map((size) => (
@@ -224,7 +237,7 @@ export default function ProductDetails() {
                                 <h3 className="sr-only">Description</h3>
 
                                 <div className="space-y-6">
-                                    <p className="text-base text-gray-900">{product.description}</p>
+                                    <p className="text-base text-gray-900">{products?.description}</p>
                                 </div>
                             </div>
 

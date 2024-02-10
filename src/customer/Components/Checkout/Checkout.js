@@ -5,24 +5,27 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import DeliveryAddressForm from './DeliveryAddressForm';
 import OrderSummary from './OrderSummary';
+import { useState } from 'react';
 
 const steps = ['Login', 'Delivery Address', 'Order Summary', 'Payment'];
 
 export default function Checkout() {
     const [activeStep, setActiveStep] = React.useState(0);
     const location = useLocation();
-    const querySearch = new URLSearchParams(location.search)
-
+    const querySearch = new URLSearchParams(location.search);
+    const [skipped,setSkipped]=useState(0);
+    const navigate=useNavigate();
     const step = querySearch.get('step')
     const handleNext = () => {
+        let newSkipped = skipped;
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        setSkipped(newSkipped);
     };
-
     const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+        navigate(`/checkout?step=${step - 1}`)
     };
 
     return (
@@ -60,7 +63,7 @@ export default function Checkout() {
                             </Button>
                         </Box>
                         <div className='mt-10'>
-                            {step == 2 ? <DeliveryAddressForm /> : <OrderSummary />}
+                            {step == 2 ? <DeliveryAddressForm handleNext={handleNext} /> : <OrderSummary />}
                         </div>
                     </React.Fragment>
                 )}
