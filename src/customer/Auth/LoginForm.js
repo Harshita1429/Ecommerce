@@ -1,6 +1,6 @@
 import { Button, Grid, TextField } from '@mui/material'
-import React from 'react'
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router'
 import { signInData } from '../../redux/feature/authslice';
 
@@ -15,7 +15,6 @@ export const LoginForm = () => {
       password: data.get("password"),
     }
     dispatch(signInData(userData));
-    // navigate("/");
   }
   return (
     <div>
@@ -31,6 +30,7 @@ export const LoginForm = () => {
           </Grid>
           <Grid item xs={12} >
             <TextField required
+            type='password'
               id='password'
               name='password'
               label='Password'

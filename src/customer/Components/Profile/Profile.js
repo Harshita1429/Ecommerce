@@ -7,8 +7,8 @@ export const Profile = () => {
   return (
     <div>
         <Card className='p-10'>
-            {"Name: "+user?.[0].firstname+" "+user?.[0].lastname}<br></br>
-            {"Email: "+user?.[0].email}
+           <p> {"Name: "+user?.[0].firstname+" "+user?.[0].lastname}</p>
+           <p> {"Email: "+user?.[0].email}</p>
         </Card>
     </div>
   )

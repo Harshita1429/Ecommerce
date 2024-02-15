@@ -24,9 +24,8 @@ const DeliveryAddressForm = ({ handleNext }) => {
       pinCode: data.get('pinCode'),
       mobile: data.get('mobile'),
     }
-    console.log('userAddress', userAddress);
     const orderData = { userAddress, navigate, jwt };
-    console.log("orderData", orderData);
+    ;
     dispatch(createOrder(orderData));
     handleNext();
   }
@@ -37,9 +36,9 @@ const DeliveryAddressForm = ({ handleNext }) => {
   return (
     <div>
       <Grid container spacing={4}>
-        <Grid xs={12} lg={5} className='border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll'>
+      {address?.[0]?.address?.length >0 &&  <Grid xs={12} lg={5} className='border rounded-e-md shadow-md h-[30.5rem] overflow-y-scroll'>
           <Box className="border rounded-md shadow-md h-[30.5rem] overflow-y-scroll ">
-            {address?.[0]?.address?.length >0 && address?.[0]?.address.map((item) => (
+            { address?.[0]?.address.map((item) => (
               <div
                 onClick={() => setSelectedAdress(item)}
                 className="p-5 py-7 border-b cursor-pointer"
@@ -60,7 +59,7 @@ const DeliveryAddressForm = ({ handleNext }) => {
               </div>
             ))}
           </Box>
-        </Grid>
+        </Grid>}
 
         <Grid item xs={12} lg={7}>
           <Box className='border rounded-s-md shadow-md p-5'>

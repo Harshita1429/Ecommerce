@@ -12,14 +12,13 @@ export const removeItemFromCart = createAsyncThunk("/cart/delete",
     });
 export const updateItemToCart = createAsyncThunk("/cart/update",
     async ({ jwt, data}) => {
-        console.log("data",data);
         const response = await axios.put("http://localhost:8080/api/cart_items/" + data.cartItemId, data.data, { headers: { "Authorization": `Bearer ${jwt}` } });
         return response.data;
     });
 export const getCartItem = createAsyncThunk("/cart/get",
     async ({ jwt }) => {
         const response = await axios.get("http://localhost:8080/api/cart/" , { headers: { "Authorization": `Bearer ${jwt}` } });
-         console.log("cart",response.data);
+        ;
         return response.data;
     });
 const cartslice = createSlice({

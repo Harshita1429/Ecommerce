@@ -1,6 +1,7 @@
+import React from 'react';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useLocation, useNavigate } from 'react-router'
 import { AuthModal } from '../../Auth/AuthModal'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
@@ -27,6 +28,7 @@ const navigation = {
             { name: 'Sweaters', to: '#' },
             { name: 'T-Shirts', to: '#' },
             { name: 'Jackets', to: '#' },
+            {name:'saree', to:'#'}
           ],
         },
         {
@@ -84,6 +86,7 @@ export default function Navigation() {
   const jwt=localStorage.getItem("jwt");
   const [openAuthModal, setOpenAuthModal] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const user_data=useSelector((state)=>state.auth.signInError);
   const openUserMenu = Boolean(anchorEl);
   const jwt_token = useSelector((state) => state.auth.signInResponse?.[0]?.jwt);
   const cartItems=useSelector((state)=>state.cart);
@@ -133,10 +136,24 @@ export default function Navigation() {
     }
   },[jwt_token]);
   useEffect(() => {
-    if (location.pathname === "/login" || location.pathname === "/register") {
+    if (location?.pathname === "/login" || location?.pathname === "/register") {
       navigate(-1);
     }
   }, [user]);
+  useEffect(()=>{
+    
+    if(user_data?.[0].message=='Request failed with status code 401')
+    {
+      // window.location.reload(false);
+      alert("Invalid password");
+    }
+    if(user_data?.[0].message=='Request failed with status code 400')
+    {
+      // window.location.reload(false);
+      alert("User not registered");
+      navigate("/register");
+    }
+  },[user_data]);
   return (
     <div className="bg-white">
       {/* Mobile menu */}
@@ -170,7 +187,7 @@ export default function Navigation() {
                     type="button"
                     className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-gray-400"
                     onClick={() => setOpen(false)}
-                  >
+                    >
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Close menu</span>
                     <XMarkIcon className="h-6 w-6" aria-hidden="true" />
@@ -211,11 +228,11 @@ export default function Navigation() {
                               aria-labelledby={`${category.id}-${section.id}-heading-mobile`}
                               className="mt-6 flex flex-col space-y-6">
                               {section.items.map((item) => (
-                                <li key={item.name} className="flow-root">
-                                  <Link to={item.to} className="-m-2 block p-2 text-gray-500">
-                                    {item.name}
-                                  </Link>
-                                </li>
+                                <li key={item.name} className="flex">
+                                <p onClick={() => handleCategoryClick(category, section, item)} className=" cursor-pointer hover:text-gray-800">
+                                  {item.name}
+                                </p>
+                              </li>
                               ))}
                             </ul>
                           </div>
@@ -224,44 +241,18 @@ export default function Navigation() {
                     ))}
                   </Tab.Panels>
                 </Tab.Group>
-
-                {/* <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {navigation.pages.map((page) => (
-                    <div key={page.name} className="flow-root">
-                      <Link to={page.to} className="-m-2 block p-2 font-medium text-gray-900">
-                        {page.name}
-                      </Link>
-                    </div>
-                  ))}
-                </div> */}
-
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <Button onClick={handleOpen} className='text-sm font-medium text-gray-700 hover:text-gray-800'>
                     Signin
                   </Button>
 
                 </div>
-
-                <div className="border-t border-gray-200 px-4 py-6">
-                  <Link to="#" className="-m-2 flex items-center p-2">
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="block h-auto w-5 flex-shrink-0"
-                    />
-                    <span className="ml-3 block text-base font-medium text-gray-900">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </Link>
-                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition.Root>
-
       <header className="relative bg-white">
-
-
         <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 z-50" >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center">

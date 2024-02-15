@@ -67,3 +67,10 @@ export const singleFilter=[
         ]
     }
 ]
+
+export const sortOptions = [
+  
+    { name: "Price: Low to High", query: "price_low", current: false },
+    { name: "Price: High to Low", query: "price_high", current: false },
+  ];
+  

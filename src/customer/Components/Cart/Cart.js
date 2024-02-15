@@ -23,6 +23,7 @@ const Cart = () => {
     }
     else{
       alert('Login to shop!');
+      navigate('/');
     }
   }, [jwt, cartData.deleteDataPayload, cartData.updatedCartItem, cartData.itemToAdd])
   return (
@@ -65,4 +66,4 @@ const Cart = () => {
   )
 }
 
-export default Cart
+export default Cart;

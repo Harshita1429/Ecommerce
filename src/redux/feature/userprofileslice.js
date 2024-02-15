@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Auth } from "../../constant";
 export const userProfileGet = createAsyncThunk("/user/profile",
     async (jwt) => {
         const response = await axios.get("http://localhost:8080/api/users/profile", { headers: { "Authorization": `Bearer ${jwt}` } });

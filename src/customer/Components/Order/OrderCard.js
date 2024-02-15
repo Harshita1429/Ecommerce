@@ -26,7 +26,7 @@ const OrderCard = ({ item }) => {
                 </Grid>
 
                 <Grid item xs={2}>
-                    <p>₹{item?.totalPrice}</p>
+                    <p>₹{item?.totalDiscountedPrice}</p>
                 </Grid>
                 <Grid item xs={4}>
                     {true && <div>

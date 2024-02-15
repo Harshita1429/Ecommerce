@@ -3,17 +3,13 @@ import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { ProductCard } from './ProductCard'
-import { filters, singleFilter } from './FilterData'
+import { filters, singleFilter, sortOptions } from './FilterData'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { productGetById } from '../../../redux/feature/productslice'
 import { Card, Pagination } from '@mui/material'
 
-const sortOptions = [
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
-]
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
@@ -41,13 +37,13 @@ export default function Product() {
         let filterValue = searchParams.getAll(sectionId);
         if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
             filterValue = filterValue[0].split(",").filter((item) => item !== value);
-            console.log("filterValue",filterValue);
+            // console.log("filterValue",filterValue);
             if (filterValue.length === 0) {
                 searchParams.delete(sectionId);
             }
         }
         else {
-            console.log("filterValue after",filterValue)
+            // console.log("filterValue after",filterValue)
             filterValue.push(value);
             console.log("filterValue after else",filterValue)
         } if (filterValue.length > 0) {
@@ -63,6 +59,13 @@ export default function Product() {
         const query = searchParams.toString();
         navigate({ search: `?${query}` });
     }
+    const handleSortChange = (value) => {
+        console.log("value",value);
+        const searchParams = new URLSearchParams(location.search);
+        searchParams.set("sort", value);
+        const query = searchParams.toString();
+        navigate({ search: `?${query}` });
+      };
     const handlePaginationChange=(event,value)=>{
         const searchParams= new URLSearchParams(location.search);
         searchParams.set("page",value);
@@ -210,16 +213,18 @@ export default function Product() {
                                             {sortOptions.map((option) => (
                                                 <Menu.Item key={option.name}>
                                                     {({ active }) => (
-                                                        <a
-                                                            href={option.href}
-                                                            className={classNames(
-                                                                option.current ? 'font-medium text-gray-900' : 'text-gray-500',
-                                                                active ? 'bg-gray-100' : '',
-                                                                'block px-4 py-2 text-sm'
-                                                            )}
-                                                        >
-                                                            {option.name}
-                                                        </a>
+                                                        <p
+                                                        onClick={() => handleSortChange(option.query)}
+                                                        className={classNames(
+                                                          option.current
+                                                            ? "font-medium text-gray-900"
+                                                            : "text-gray-500",
+                                                          active ? "bg-gray-100" : "",
+                                                          "block px-4 py-2 text-sm cursor-pointer"
+                                                        )}
+                                                      >
+                                                        {option.name}
+                                                      </p>
                                                     )}
                                                 </Menu.Item>
                                             ))}
