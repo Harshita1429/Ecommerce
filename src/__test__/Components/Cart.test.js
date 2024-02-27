@@ -122,14 +122,13 @@ describe("Cart component", () => {
     });
     test('renders name in profile', async () => {
         window.alert = jest.fn();
-        const handleUpdateCartItem=jest.fn();
+        // const handleUpdateCartItem=jest.fn();
         render(<BrowserRouter><Cart /></BrowserRouter>)
         const checkout = screen.getByText('Checkout');
         expect(checkout).toBeInTheDocument();
         await waitFor(() => {
             fireEvent.click(checkout);
         });
-        screen.debug();
         const remove = screen.getByText('Remove');
         await waitFor(() => {
             fireEvent.click(remove);

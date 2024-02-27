@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 export const productGetById = createAsyncThunk("/product/get",
-    async ({ jwt, data }) => {;
+    async ({ jwt, data }) => {
         const response = await axios.get("http://localhost:8080/api/products?category=" + data.category + "&color=" + data.colors + "&size=" + data.sized + "&minPrice=" + data.minPrice + "&maxPrice=" + data.maxPrice + "&minDiscount=" + data.minDiscount + "&maxDiscount=" + data.maxDiscount + "&sort=" + data.sort + "&stock=" + data.stock + "&pageNumber=" + data.pageNumber + "&pageSize=" + data.pageSize, { headers: { "Authorization": `Bearer ${jwt}` } });
         return response.data;
     });
@@ -21,8 +21,13 @@ export const addProduct = createAsyncThunk("/product/add",
         return response.data;
     });
 export const updateProduct = createAsyncThunk("/product/update",
-    async ({ jwt, productData,productId }) => {
-        const response = await axios.put("http://localhost:8080/api/admin/products/"+productId+"/update", productData, { headers: { "Authorization": `Bearer ${jwt}` } });
+    async ({ jwt, productData, productId }) => {
+        const response = await axios.put("http://localhost:8080/api/admin/products/" + productId + "/update", productData, { headers: { "Authorization": `Bearer ${jwt}` } });
+        return response.data;
+    });
+export const allProducts = createAsyncThunk("/all/product",
+    async ({ jwt}) => {
+        const response = await axios.get("http://localhost:8080/api/admin/products/all", { headers: { "Authorization": `Bearer ${jwt}` } });
         return response.data;
     });
 const productslice = createSlice({
@@ -40,9 +45,12 @@ const productslice = createSlice({
         addproduct: [],
         addProductLoading: false,
         addProductError: null,
-        updateProduct:[],
-        updateLoading:false,
-        updateError:null
+        updateProduct: [],
+        updateLoading: false,
+        updateError: null,
+        allProduct:[],
+        allProductLoading:false,
+        allProductError:null
     },
     extraReducers(builder) {
         builder
@@ -101,7 +109,7 @@ const productslice = createSlice({
                 state.addProductLoading = true;
                 state.addProductError = action.error;
             })
-            builder
+        builder
             .addCase(updateProduct.pending, (state, action) => {
                 state.updateLoading = true;
             })
@@ -114,6 +122,20 @@ const productslice = createSlice({
             .addCase(updateProduct.rejected, (state, action) => {
                 state.updateLoading = true;
                 state.updateError = action.error;
+            })
+            builder
+            .addCase(allProducts.pending, (state, action) => {
+                state.allProductLoading = true;
+            })
+        builder
+            .addCase(allProducts.fulfilled, (state, action) => {
+                state.allProductLoading = false;
+                state.allProduct = [action.payload];
+            })
+        builder
+            .addCase(allProducts.rejected, (state, action) => {
+                state.allProductLoading = true;
+                state.allProductError = action.error;
             })
     }
 });

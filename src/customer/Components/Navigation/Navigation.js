@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { Bars3Icon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useLocation, useNavigate } from 'react-router'
 import { AuthModal } from '../../Auth/AuthModal'
 import { Avatar, Button, Menu, MenuItem } from '@mui/material'
@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { logout, userProfileGet } from '../../../redux/feature/userprofileslice'
 import { Link } from 'react-router-dom'
 import { getCartItem } from '../../../redux/feature/cartslice'
-
-
+import { ToastContainer, toast } from "react-toastify";
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 const navigation = {
   categories: [
     {
@@ -108,7 +108,7 @@ export default function Navigation() {
     close()
     }
     else{
-      alert('Please login to shop!');
+      toast.info("Please login to shop!");
       handleOpen();
     }
   }
@@ -129,6 +129,15 @@ export default function Navigation() {
     handleCloseUserMenu();
     navigate("/");
     window.location.reload(false);
+  } 
+  const handleCartClick=()=>{
+    if(jwt)
+    {
+      navigate('/cart');
+    }
+    else{
+      toast.info('Please Login to Shop!');
+    }
   }
   useEffect(()=>{
     if (jwt_token) {
@@ -145,12 +154,11 @@ export default function Navigation() {
     if(user_data?.[0].message=='Request failed with status code 401')
     {
       // window.location.reload(false);
-      alert("Invalid password");
+      toast.warning("Invalid password");
     }
     if(user_data?.[0].message=='Request failed with status code 400')
     {
-      // window.location.reload(false);
-      alert("User not registered");
+      toast.warning("User not registered");
       navigate("/register");
     }
   },[user_data]);
@@ -380,10 +388,10 @@ export default function Navigation() {
                       MenuListProps={{
                         "aria-labelledby": "basic-button",
                       }}>
-                      <MenuItem onClick={()=>{navigate('/profile')}}>
+                      <MenuItem onClick={()=>{navigate('/profile');handleCloseUserMenu()}}>
                         Profile
                       </MenuItem>
-                      <MenuItem onClick={() => { navigate('/account/order') }}>
+                      <MenuItem onClick={() => { navigate('/account/order');handleCloseUserMenu() }}>
                         My Orders
                       </MenuItem>
                       <MenuItem onClick={handleLogout}>
@@ -422,20 +430,33 @@ export default function Navigation() {
 
                 {/* Cart */}
                 <div className="ml-4 flow-root lg:ml-6">
-                  <Link to="/cart" className="group -m-2 flex items-center p-2">
+                  <div className="group -m-2 flex items-center p-2 cursor-pointer" onClick={handleCartClick}>
                     <ShoppingBagIcon
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
+                      aria-hidden="true"  
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">{cartItems?.cartItem?.[0]?.totalItem}</span>
                     <span className="sr-only">items in cart, view bag</span>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </nav>
       </header>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+      />
+ 
       <AuthModal handleClose={handleClose} open={openAuthModal} />
     </div>
   )

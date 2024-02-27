@@ -2,14 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 export const createOrder = createAsyncThunk("/order/create",
     async (reqData) => {
-        console.log("reqData", reqData);
         var newjsonobj = { ...reqData.userAddress }
         delete newjsonobj.id;
         const response = await axios.post("http://localhost:8080/api/orders/", newjsonobj, { headers: { "Authorization": `Bearer ${reqData.jwt}` } });
         if (response.data.id) {
             reqData.navigate({ search: `step=3&order_id=` + response.data.id });
         }
-        console.log("data", response.data);
         return response.data;
     });
 export const getOrderById = createAsyncThunk("/order/get",

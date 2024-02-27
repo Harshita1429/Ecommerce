@@ -40,7 +40,7 @@ const authslice = createSlice({
             })
         builder
             .addCase(signUpData.rejected, (state, action) => {
-                state.signUpLoading = true;
+                state.signUpLoading = false;
                 state.signUpError = action.error;
             })
         builder
@@ -54,8 +54,8 @@ const authslice = createSlice({
             })
         builder
             .addCase(signInData.rejected, (state, action) => {
-                state.signInLoading = true;
-                state.signInError = [action.error];
+                state.signInLoading = false;
+                state.signInError = action.error;
             })
 
     }

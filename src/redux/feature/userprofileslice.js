@@ -27,11 +27,11 @@ const userprofileslice = createSlice({
         builder
             .addCase(userProfileGet.fulfilled, (state, action) => {
                 state.loading = false;
-                state.userData = [action.payload];
+                state.userData = action.payload;
             })
         builder
             .addCase(userProfileGet.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error;
             })
     }

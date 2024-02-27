@@ -34,7 +34,7 @@ const OrderDetails = () => {
                 {orders?.[0]?.orderItems?.map((items) => <Grid item container className='shadow-xl rounded-md p-5 border' sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
                     <Grid item xs={6}>
                         <div className='flex items-center space-x-4'>
-                            <img className='w-[5rem] h-[5rem] object-cover object-top' src='https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTzFSW1YJ71ey8FAMngqwXOm4KGhsjugkW4Oeqjq3Aq3cHXdM9U013yauOO90My3EDe3zCcyhKIlnD2uzDYg9vVFbwVpX0urzL4_ycaSp8WpxQYCfvyHI06' alt='' />
+                            <img className='w-[5rem] h-[5rem] object-cover object-top' src={items?.product?.imageUrl} alt='' />
                             <div className='space-y-2 ml-5'>
                                 <p className='font-semibold'>{items?.product?.title}</p>
                                 <p className='space-x-5 opacity-50 text-xs font-semibold'> <span>Size: {items?.size}</span> <span>Color: {items?.product?.color}</span></p>

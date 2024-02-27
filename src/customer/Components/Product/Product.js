@@ -1,14 +1,17 @@
+import React from 'react'
 import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, MinusIcon, Squares2X2Icon } from '@heroicons/react/20/solid';
+import AddIcon from '@mui/icons-material/Add';
 import { ProductCard } from './ProductCard'
 import { filters, singleFilter, sortOptions } from './FilterData'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { productGetById } from '../../../redux/feature/productslice'
-import { Card, Pagination } from '@mui/material'
+import { Card, Pagination } from '@mui/material';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
@@ -37,15 +40,13 @@ export default function Product() {
         let filterValue = searchParams.getAll(sectionId);
         if (filterValue.length > 0 && filterValue[0].split(",").includes(value)) {
             filterValue = filterValue[0].split(",").filter((item) => item !== value);
-            // console.log("filterValue",filterValue);
+            
             if (filterValue.length === 0) {
                 searchParams.delete(sectionId);
             }
         }
         else {
-            // console.log("filterValue after",filterValue)
             filterValue.push(value);
-            console.log("filterValue after else",filterValue)
         } if (filterValue.length > 0) {
             searchParams.set(sectionId, filterValue.join(","));
         }
@@ -60,7 +61,6 @@ export default function Product() {
         navigate({ search: `?${query}` });
     }
     const handleSortChange = (value) => {
-        console.log("value",value);
         const searchParams = new URLSearchParams(location.search);
         searchParams.set("sort", value);
         const query = searchParams.toString();
@@ -145,7 +145,7 @@ export default function Product() {
                                                                     {open ? (
                                                                         <MinusIcon className="h-5 w-5" aria-hidden="true" />
                                                                     ) : (
-                                                                        <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                                        <AddIcon className="h-5 w-5" aria-hidden="true" />
                                                                     )}
                                                                 </span>
                                                             </Disclosure.Button>
@@ -243,7 +243,7 @@ export default function Product() {
                                 onClick={() => setMobileFiltersOpen(true)}
                             >
                                 <span className="sr-only">Filters</span>
-                                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+                                <FilterAltIcon className="h-5 w-5" aria-hidden="true" />
                             </button>
                         </div>
                     </div>
@@ -272,7 +272,7 @@ export default function Product() {
                                                                 {open ? (
                                                                     <MinusIcon className="h-5 w-5" aria-hidden="true" />
                                                                 ) : (
-                                                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                                    <AddIcon className="h-5 w-5" aria-hidden="true" />
                                                                 )}
                                                             </span>
                                                         </Disclosure.Button>
@@ -315,7 +315,7 @@ export default function Product() {
                                                                 {open ? (
                                                                     <MinusIcon className="h-5 w-5" aria-hidden="true" />
                                                                 ) : (
-                                                                    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                                                                    <AddIcon className="h-5 w-5" aria-hidden="true" />
                                                                 )}
                                                             </span>
                                                         </Disclosure.Button>

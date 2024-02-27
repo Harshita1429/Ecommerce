@@ -1,5 +1,5 @@
+import React from 'react';
 import { useEffect, useState } from 'react'
-import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
@@ -70,7 +70,6 @@ export default function ProductDetails() {
     console.log("product",products);
     const dispatch=useDispatch();
     const jwt=localStorage.getItem("jwt");
-    // const jwt = useSelector((state) => state.auth.signInResponse?.[0]?.jwt);
     const handleAddToCart =()=>{
         const data={productId:params.productId,size:selectedSize.name};
         dispatch(addItemToCart({jwt,data}));
@@ -122,13 +121,13 @@ export default function ProductDetails() {
                             />
                         </div>
                         <div className="flex flex-wrap space-x-5 justify-center">
-                            {product.images.map((item) => <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
+                            {/* {product.images.map((item) => <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4">
                                 <img
                                     src={item.src}
                                     alt={item.alt}
                                     className="h-full w-full object-cover object-center"
                                 />
-                            </div>)}
+                            </div>)} */}
                         </div>
                     </div>
                     {/* Product info */}
@@ -245,22 +244,22 @@ export default function ProductDetails() {
                                 <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 
                                 <div className="mt-4">
-                                    <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                                    {/* <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
                                         {product.highlights.map((highlight) => (
                                             <li key={highlight} className="text-gray-400">
                                                 <span className="text-gray-600">{highlight}</span>
                                             </li>
                                         ))}
-                                    </ul>
+                                    </ul> */}
                                 </div>
                             </div>
 
                             <div className="mt-10">
-                                <h2 className="text-sm font-medium text-gray-900">Details</h2>
+                                {/* <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
                                 <div className="mt-4 space-y-6">
                                     <p className="text-sm text-gray-600">{product.details}</p>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>

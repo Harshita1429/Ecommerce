@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router'
 import { signInData } from '../../redux/feature/authslice';
 
 export const LoginForm = () => {
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user_data = useSelector((state) => state.auth.signInError);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -15,12 +16,16 @@ export const LoginForm = () => {
       password: data.get("password"),
     }
     dispatch(signInData(userData));
+    if (user_data?.[0].message == 'Request failed with status code 401' || user_data?.[0].message == 'Request failed with status code 400') {
+      document.forms['id_form'].reset();
+      console.log('data', data);
+    }
   }
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} id='id_form'>
         <Grid container spacing={3}>
-            <Grid item xs={12} > 
+          <Grid item xs={12} >
             <TextField required
               id='email'
               name='email'
@@ -30,7 +35,7 @@ export const LoginForm = () => {
           </Grid>
           <Grid item xs={12} >
             <TextField required
-            type='password'
+              type='password'
               id='password'
               name='password'
               label='Password'

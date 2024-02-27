@@ -1,5 +1,5 @@
 import React from "react";
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Navigation from '../../customer/Components/Navigation/Navigation';
 import { useSelector } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -76,6 +76,9 @@ describe("NavigationComponent", () => {
     await waitFor(() => {
       fireEvent.click(orders);
     });
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('ShoppingBagIcon'));
+  })
   })
 
   test('testing inside useEffect', async() => {

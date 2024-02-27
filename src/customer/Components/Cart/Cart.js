@@ -12,7 +12,6 @@ const Cart = () => {
   const jwt = localStorage.getItem("jwt");
   const cart = useSelector((state) => state.cart.cartItem?.[0]);
   const cartData = useSelector((state) => state.cart);
-  console.log("cart", cart?.cartItems);
   const handleCheckout = () => {
     navigate('/checkout?step=2')
   }
@@ -20,10 +19,6 @@ const Cart = () => {
     if(jwt)
     {
     dispatch(getCartItem({ jwt }));
-    }
-    else{
-      alert('Login to shop!');
-      navigate('/');
     }
   }, [jwt, cartData.deleteDataPayload, cartData.updatedCartItem, cartData.itemToAdd])
   return (
@@ -60,7 +55,7 @@ const Cart = () => {
           </div>
         </div>
       </div>}
-      {cart?.cartItems?.length == 0 && <Card className=' w-full  m-10 p-10 flex justify-center'>Your cart is empty!
+      {cart?.cartItems?.length == 0 && <Card className=' w-full  p-10 flex justify-center'>Your cart is empty!
       </Card>}
     </div>
   )

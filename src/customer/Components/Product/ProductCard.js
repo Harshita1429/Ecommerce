@@ -1,14 +1,16 @@
 import React from 'react'
 import "./ProductCard.css";
 import { useNavigate } from 'react-router';
+import LazyLoad from 'react-lazyload';
 
-export const ProductCard = ({product}) => {
-     console.log("product",product);
+export const ProductCard = ({ product }) => {
     const navigate = useNavigate();
     return (
-        <div onClick={()=>navigate(`/product/${product.id}`)} className='productCard w-[13rem] m-3 transition-all cursor-pointer'>
+        <div onClick={() => navigate(`/product/${product.id}`)} className='productCard w-[13rem] m-3 transition-all cursor-pointer'>
             <div className='h-[20rem]'>
-                <img className='h-full w-full object-cover object-left-top' src={product.imageUrl} />
+                <LazyLoad>
+                    <img className='h-full w-full object-cover object-left-top' src={product.imageUrl} />
+                </LazyLoad>
             </div>
             <div className='textPart bg-white'>
                 <div>

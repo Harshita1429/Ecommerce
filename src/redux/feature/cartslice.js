@@ -18,7 +18,6 @@ export const updateItemToCart = createAsyncThunk("/cart/update",
 export const getCartItem = createAsyncThunk("/cart/get",
     async ({ jwt }) => {
         const response = await axios.get("http://localhost:8080/api/cart/" , { headers: { "Authorization": `Bearer ${jwt}` } });
-        ;
         return response.data;
     });
 const cartslice = createSlice({
@@ -49,7 +48,7 @@ const cartslice = createSlice({
             })
         builder
             .addCase(addItemToCart.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.error;
             })
         builder
@@ -63,7 +62,7 @@ const cartslice = createSlice({
             })
         builder
             .addCase(removeItemFromCart.rejected, (state, action) => {
-                state.removeLoading = true;
+                state.removeLoading = false;
                 state.removeError = action.error;
             })
         builder
@@ -77,7 +76,7 @@ const cartslice = createSlice({
             })
         builder
             .addCase(updateItemToCart.rejected, (state, action) => {
-                state.updateLoading = true;
+                state.updateLoading = false;
                 state.updateError = action.error;
             })
             builder
@@ -91,7 +90,7 @@ const cartslice = createSlice({
             })
         builder
             .addCase(getCartItem.rejected, (state, action) => {
-                state.cartItemLoading = true;
+                state.cartItemLoading = false;
                 state.getCartItemError = action.error;
             })
     }

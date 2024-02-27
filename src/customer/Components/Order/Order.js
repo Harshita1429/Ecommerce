@@ -13,7 +13,12 @@ import { getOrderHistory } from '../../../redux/feature/orderslice'
 const Order = () => {
     const dispatch=useDispatch();
     const orderHistoryData=useSelector((state)=>state.order.getOrderHistory?.[0]);
-    console.log("orderHistoryData",orderHistoryData?.[0]);
+    // const historyArray=orderHistoryData?.reverse();
+    var ReverseArray = [];
+    var length = orderHistoryData?.length;
+    for(var i = length-1;i>=0;i--){
+        ReverseArray.push(orderHistoryData[i]);
+    }
     const jwt=localStorage.getItem("jwt");
     useEffect(()=>{
         dispatch(getOrderHistory({jwt}));
@@ -34,9 +39,7 @@ const Order = () => {
                 </div>
             </Grid> */}
             <Grid item xs={9}>
-                <div className='space-y-5'>{orderHistoryData?.map((item) =><OrderCard item={item}/>  )}</div>
-                
-                
+                <div className='space-y-5'>{ReverseArray?.map((item) =><OrderCard item={item}/>  )}</div>     
             </Grid>
         </Grid>
     </div>
